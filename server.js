@@ -1,11 +1,15 @@
 const express = require('express');
 const app = express();
-const moment = require('moment');
+const ejs = require('ejs');
 const ExcelJS = require('exceljs');
+const path = require('path');
+const qrcode = require('qrcode');
 const port =  process.env.PORT || 8000;
+
+
 const fs = require('fs');
 const axios = require('axios').default;
-
+const moment = require('moment');
 
 //Variaveis
 const botPort = 3000;
@@ -13,7 +17,7 @@ const botName = 'teste'
 let logger = require('logger').createLogger('development.log'); // logs to a file
 logger.setLevel('debug');
 //var botAPI = 'http://localhost:'+botPort+'/api/v1/bots/'+botName+'/converse/'
-
+var qrcode_code = '';
 
 const { Client } = require('whatsapp-web.js');
 const SESSION_FILE_PATH = './session.json';
@@ -30,6 +34,7 @@ client.initialize();
 client.on('qr', (qr) => {
     // NOTE: This event will not be fired if a session is specified.
     console.log('QR RECEIVED', qr);
+    qrcode_code = qr;
 });
 
 client.on('authenticated', (session) => {
@@ -258,13 +263,25 @@ async function sendLog(msg){
  }
 };
 
+// qr code
 
+app.use(express.json())
+app.use(express.urlencoded({extended : false}))
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
+app.set('view engine', 'ejs')
+app.set('views', path.join(__dirname, 'view'))
+
+// transformar em qr code
+app.get('/', (req, res, next) => {
+  qrcode.toDataURL(qrcode_code, (err, src) => {
+    res.render("scan", {
+    qr_code : src
+    });
+})
 })
 
 
 app.listen(port, () => {
   console.log(`app listening at http://localhost:${port}`)
 })
+
