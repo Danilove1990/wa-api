@@ -25,7 +25,7 @@ var botAPI = 'http://localhost:' + botPort + '/api/v1/bots/' + botName + '/conve
 //   sessionCfg = require('.' + SESSION_FILE_PATH);
 // }
 
-const client = new Client({ puppeteer: { headless: false, args: ['--no-sandbox'] } });
+const client = new Client({ puppeteer: { headless: true, args: ['--no-sandbox'] } });
 
 
 client.initialize();
