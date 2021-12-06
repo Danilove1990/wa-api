@@ -15,7 +15,7 @@ const botName = 'teste3';
 
 
 var qrcode_code = '';
-var botAPI = 'http://localhost:' + botPort + '/api/v1/bots/' + botName + '/converse/'
+var botAPI = 'https://chatbot.sf.prefeitura.sp.gov.br/api/v1/bots/' + botName + '/converse/'
 //
 // puppeteer
 
